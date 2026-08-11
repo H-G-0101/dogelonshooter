@@ -1143,7 +1143,7 @@ gdjs.copyArray(runtimeScene.getObjects("Tutorial"), gdjs.GameSceneCode.GDTutoria
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText("Hold " + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Shoot").getAsString() + " to shoot");
+    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText("Click / tap to shoot");
 }
 }
 }
@@ -1184,7 +1184,7 @@ gdjs.copyArray(runtimeScene.getObjects("Tutorial"), gdjs.GameSceneCode.GDTutoria
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText("Hold " + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Shoot").getAsString() + " to shoot");
+    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText("Click / tap to shoot");
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDKeyboardObjects2.length ;i < len;++i) {
@@ -1229,7 +1229,7 @@ gdjs.copyArray(runtimeScene.getObjects("Tutorial"), gdjs.GameSceneCode.GDTutoria
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects1.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects1[i].getBehavior("Text").setText("Hold " + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Shoot").getAsString() + " to shoot");
+    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects1[i].getBehavior("Text").setText("Click / tap to shoot");
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDKeyboardObjects1.length ;i < len;++i) {
