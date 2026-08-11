@@ -84,7 +84,7 @@ for (var i = 0, k = 0, l = gdjs.TitleCode.GDQuitGame_9595ButtonObjects1.length;i
 }
 gdjs.TitleCode.GDQuitGame_9595ButtonObjects1.length = k;
 if (isConditionTrue_0) {
-{gdjs.evtTools.runtimeScene.stopGame(runtimeScene);
+{if (typeof window !== "undefined" && window.__openControls) { window.__openControls(); }
 }
 }
 

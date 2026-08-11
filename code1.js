@@ -1139,11 +1139,11 @@ if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("Hold_X_to_Shoot"), gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2);
 gdjs.copyArray(runtimeScene.getObjects("Tutorial"), gdjs.GameSceneCode.GDTutorialObjects2);
 {for(var i = 0, len = gdjs.GameSceneCode.GDTutorialObjects2.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDTutorialObjects2[i].getBehavior("Text").setText("Tutorial:\nUse " + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Up").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Left").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Down").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Right").getAsString() + " to move\nSpace to jump");
+    gdjs.GameSceneCode.GDTutorialObjects2[i].getBehavior("Text").setText((typeof window !== "undefined" && window.__tutorialText ? window.__tutorialText() : "Tutorial:\nWASD to move\nSpace to jump"));
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText("Click / tap to shoot");
+    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText((typeof window !== "undefined" && window.__shootHintText ? window.__shootHintText() : "Click / tap to shoot"));
 }
 }
 }
@@ -1180,11 +1180,11 @@ gdjs.copyArray(runtimeScene.getObjects("Tutorial"), gdjs.GameSceneCode.GDTutoria
 {runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Shoot").setString("j");
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDTutorialObjects2.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDTutorialObjects2[i].getBehavior("Text").setText("Tutorial:\nUse " + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Up").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Left").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Down").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Right").getAsString() + " to move\nSpace to jump");
+    gdjs.GameSceneCode.GDTutorialObjects2[i].getBehavior("Text").setText((typeof window !== "undefined" && window.__tutorialText ? window.__tutorialText() : "Tutorial:\nWASD to move\nSpace to jump"));
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText("Click / tap to shoot");
+    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects2[i].getBehavior("Text").setText((typeof window !== "undefined" && window.__shootHintText ? window.__shootHintText() : "Click / tap to shoot"));
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDKeyboardObjects2.length ;i < len;++i) {
@@ -1225,11 +1225,11 @@ gdjs.copyArray(runtimeScene.getObjects("Tutorial"), gdjs.GameSceneCode.GDTutoria
 {runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Shoot").setString("k");
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDTutorialObjects1.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDTutorialObjects1[i].getBehavior("Text").setText("Tutorial:\nUse " + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Up").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Left").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Down").getAsString() + runtimeScene.getScene().getVariables().getFromIndex(2).getChild("Right").getAsString() + " to move\nSpace to jump");
+    gdjs.GameSceneCode.GDTutorialObjects1[i].getBehavior("Text").setText((typeof window !== "undefined" && window.__tutorialText ? window.__tutorialText() : "Tutorial:\nWASD to move\nSpace to jump"));
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects1.length ;i < len;++i) {
-    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects1[i].getBehavior("Text").setText("Click / tap to shoot");
+    gdjs.GameSceneCode.GDHold_9595X_9595to_9595ShootObjects1[i].getBehavior("Text").setText((typeof window !== "undefined" && window.__shootHintText ? window.__shootHintText() : "Click / tap to shoot"));
 }
 }
 {for(var i = 0, len = gdjs.GameSceneCode.GDKeyboardObjects1.length ;i < len;++i) {
