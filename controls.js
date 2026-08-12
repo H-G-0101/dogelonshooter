@@ -17,23 +17,25 @@
     return;
   }
 
-  var MIN_HOLD_MS = 220; // clique curto precisa segurar o tiro > 1 frame de animacao
+  // Um toque = um tiro. O pulso segura a tecla de tiro por alguns frames
+  // porque o disparo so sai quando a animacao "Shoot" passa do frame 0.
+  var SHOOT_PULSE_MS = 220;
   var STORAGE_KEY = 'dogelon.controlScheme';
 
   var SCHEMES = {
     wasd: {
       label: 'WASD',
-      note: 'Mao esquerda no teclado, tiro no clique ou no J.',
+      note: 'Mao esquerda no teclado. Tiro tambem no clique.',
       left: ['KeyA'], right: ['KeyD'], up: ['KeyW'], down: ['KeyS'],
       jump: ['Space'], shoot: ['KeyJ'],
-      rows: [['Mover', 'A / D'], ['Escada', 'W / S'], ['Pular', 'Espaco'], ['Atirar', 'J ou clique']]
+      rows: [['Mover', 'A / D'], ['Escada', 'W / S'], ['Pular', 'Espaco'], ['Atirar', 'J (1 toque = 1 tiro)']]
     },
     arrows: {
       label: 'Setas + Z X',
-      note: 'Mao direita nas setas, pulo e tiro na esquerda.',
+      note: 'Mao direita nas setas. Tiro tambem no clique.',
       left: ['ArrowLeft'], right: ['ArrowRight'], up: ['ArrowUp'], down: ['ArrowDown'],
       jump: ['Space', 'KeyX'], shoot: ['KeyZ'],
-      rows: [['Mover', '\u2190 / \u2192'], ['Escada', '\u2191 / \u2193'], ['Pular', 'Espaco ou X'], ['Atirar', 'Z ou clique']]
+      rows: [['Mover', '\u2190 / \u2192'], ['Escada', '\u2191 / \u2193'], ['Pular', 'Espaco ou X'], ['Atirar', 'Z (1 toque = 1 tiro)']]
     }
   };
 
@@ -45,8 +47,11 @@
 
   // ---------------------------------------------------------------- input
   var physical = {};            // e.code -> true
-  var pointerHoldUntil = 0;
-  var pointerDown = false;
+  var shootPulseUntil = 0;      // ate quando a tecla de tiro fica injetada
+  var pointerArmed = true;      // semi-automatico: rearma so ao soltar
+  var keyArmed = true;
+  var shootWasActive = false;
+  var shootJustEnded = false;
   var overlayOpen = false;
   var synthHeld = {};           // nome de tecla gdjs -> true (injetada por nos)
 
@@ -63,24 +68,45 @@
     return false;
   }
   function shootActive() {
-    return pointerDown || Date.now() < pointerHoldUntil || anyDown(SCHEMES[scheme].shoot);
+    return Date.now() < shootPulseUntil;
+  }
+  function pulseShoot() {
+    if (overlayOpen) return;
+    shootPulseUntil = Date.now() + SHOOT_PULSE_MS;
+  }
+  function isShootKey(code) {
+    return SCHEMES[scheme].shoot.indexOf(code) !== -1;
   }
 
   window.addEventListener('keydown', function (e) {
+    var wasDown = !!physical[e.code];
     physical[e.code] = true;
-    if (e.code === 'Escape') { e.preventDefault(); toggleOverlay(); }
+    if (e.code === 'Escape') { e.preventDefault(); toggleOverlay(); return; }
+    // um tiro por toque: segurar a tecla nao dispara de novo
+    if (isShootKey(e.code)) {
+      e.preventDefault();
+      if (!wasDown && keyArmed) { keyArmed = false; pulseShoot(); }
+      return;
+    }
     // evita a pagina rolar com setas/espaco
     if (e.code === 'Space' || e.code.indexOf('Arrow') === 0) e.preventDefault();
   }, true);
-  window.addEventListener('keyup', function (e) { physical[e.code] = false; }, true);
-  window.addEventListener('blur', function () { physical = {}; pointerDown = false; });
+
+  window.addEventListener('keyup', function (e) {
+    physical[e.code] = false;
+    if (isShootKey(e.code)) keyArmed = true;
+  }, true);
+
+  window.addEventListener('blur', function () {
+    physical = {}; pointerArmed = true; keyArmed = true; shootPulseUntil = 0;
+  });
 
   function press() {
-    if (overlayOpen) return;
-    pointerDown = true;
-    pointerHoldUntil = Date.now() + MIN_HOLD_MS;
+    if (overlayOpen || !pointerArmed) return;
+    pointerArmed = false;
+    pulseShoot();
   }
-  function release() { pointerDown = false; }
+  function release() { pointerArmed = true; }
 
   window.addEventListener('pointerdown', press, true);
   window.addEventListener('pointerup', release, true);
@@ -114,8 +140,11 @@
         if (anyDown(s.up))    { want[controlsVar(runtimeScene, 'Up', 'w')] = 1; }
         if (anyDown(s.down))  { want[controlsVar(runtimeScene, 'Down', 's')] = 1; }
         if (anyDown(s.jump))  { want[controlsVar(runtimeScene, 'Jump', 'Space')] = 1; }
-        if (shootActive())    { want[controlsVar(runtimeScene, 'Shoot', 'j')] = 1; want.j = 1; want.k = 1; }
       }
+
+      var nowShooting = !overlayOpen && shootActive();
+      shootJustEnded = shootWasActive && !nowShooting;
+      shootWasActive = nowShooting;
 
       var inputManager = runtimeScene.getGame().getInputManager();
       var codes = gdjs.evtTools.input.keysNameToCode;
@@ -138,6 +167,21 @@
   } else {
     console.warn('[controls] registerRuntimeScenePreEventsCallback ausente');
   }
+
+  // ------------------- leitura da tecla de tiro (ignora segurar a tecla) ----
+  var GAME_SHOOT_KEYS = { j: true, k: true }; // valores possiveis de Controls.Shoot
+
+  var origIsKeyPressed = gdjs.evtTools.input.isKeyPressed;
+  gdjs.evtTools.input.isKeyPressed = function (runtimeScene, keyName) {
+    if (GAME_SHOOT_KEYS[keyName]) return !overlayOpen && shootActive();
+    return origIsKeyPressed(runtimeScene, keyName);
+  };
+
+  var origWasKeyReleased = gdjs.evtTools.input.wasKeyReleased;
+  gdjs.evtTools.input.wasKeyReleased = function (runtimeScene, keyName) {
+    if (GAME_SHOOT_KEYS[keyName]) return shootJustEnded;
+    return origWasKeyReleased(runtimeScene, keyName);
+  };
 
   // ------------------------------------------------------------- overlay
   var el = null;
@@ -225,14 +269,16 @@
     el.style.display = 'flex';
     overlayOpen = true;
     physical = {};
-    pointerDown = false;
-    pointerHoldUntil = 0;
+    shootPulseUntil = 0;
+    pointerArmed = true;
+    keyArmed = true;
   }
   function closeOverlay() {
     if (el) el.style.display = 'none';
     overlayOpen = false;
-    pointerDown = false;
-    pointerHoldUntil = 0;
+    shootPulseUntil = 0;
+    pointerArmed = true;
+    keyArmed = true;
   }
   function toggleOverlay() { overlayOpen ? closeOverlay() : openOverlay(); }
 
